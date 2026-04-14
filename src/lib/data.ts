@@ -17,23 +17,23 @@ export interface Unit {
   description: string;
 }
 
-// TODO: Replace placeholder images with real property photos
-// Using HAAUS-style interior/exterior photos as mockup placeholders
+// TODO: Replace with real property photos when ready
+// Currently using HAAUS reference photos as mockup placeholders
 export const PLACEHOLDER_IMAGES = {
-  hero: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=1920&q=80",
-  lobby: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1200&q=80",
-  exterior: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1200&q=80",
-  pool: "https://images.unsplash.com/photo-1575429198097-0414ec08e8cd?w=1200&q=80",
-  interior1: "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&q=80",
-  interior2: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80",
-  interior3: "https://images.unsplash.com/photo-1560448204-603b3fc33ddc?w=800&q=80",
-  interior4: "https://images.unsplash.com/photo-1585412727339-54e4bae3bbf9?w=800&q=80",
-  kitchen: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&q=80",
-  bathroom: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=800&q=80",
-  living: "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=800&q=80",
-  bedroom: "https://images.unsplash.com/photo-1540518614846-7eded433c457?w=800&q=80",
-  balcony: "https://images.unsplash.com/photo-1600573472550-8090b5e0745e?w=800&q=80",
-  rooftop: "https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=800&q=80",
+  hero: "/images/hero.jpeg",
+  lobby: "/images/investment.jpeg",
+  exterior: "/images/exterior1.jpeg",
+  pool: "/images/pool.jpeg",
+  interior1: "/images/interior1.jpeg",
+  interior2: "/images/interior2.jpeg",
+  interior3: "/images/interior3.jpeg",
+  interior4: "/images/interior4.jpeg",
+  kitchen: "/images/interior4.jpeg",
+  bathroom: "/images/interior3.jpeg",
+  living: "/images/interior2.jpeg",
+  bedroom: "/images/interior1.jpeg",
+  balcony: "/images/exterior2.jpeg",
+  rooftop: "/images/rooftop.jpeg",
 };
 
 // TODO: Replace with real units when ready.
@@ -121,11 +121,32 @@ export const UNITS: Unit[] = [
 
 export const FEATURES = [
   { icon: "🔑", title: "Self Check-in", desc: "Acceso 24/7 con código digital" },
-  { icon: "🧹", title: "Housekeeping", desc: "Limpieza profesional incluida" },
+  { icon: "🧹", title: "Housekeeping", desc: "Limpieza profesional programada" },
   { icon: "📱", title: "Soporte 24hs", desc: "WhatsApp directo con el equipo" },
   { icon: "🅿️", title: "Parking", desc: "Cochera disponible bajo reserva" },
   { icon: "🌐", title: "Wi-Fi Premium", desc: "Fibra óptica de alta velocidad" },
-  { icon: "🛡️", title: "Seguridad", desc: "Vigilancia y acceso controlado 24hs" },
+  { icon: "🛡️", title: "Seguridad 24hs", desc: "Vigilancia y acceso controlado" },
+];
+
+export const AMENITIES = [
+  "Piscina con solarium",
+  "Rooftop con parrillas y fogonero",
+  "Gym equipado",
+  "Salón de usos múltiples",
+  "Coffee Lab",
+  "Cocina gourmet compartida",
+  "Coworking",
+  "Bicicletero",
+  "Laundry",
+  "Techo verde",
+  "Seguridad 24 hs",
+];
+
+export const AMENITY_IMAGES = [
+  { src: "/images/pool.jpeg", label: "Piscina & Solarium" },
+  { src: "/images/rooftop.jpeg", label: "Rooftop & Parrillas" },
+  { src: "/images/gym.jpeg", label: "Gym" },
+  { src: "/images/amenity.jpeg", label: "SUM & Coworking" },
 ];
 
 // Contact info — TODO: Replace with real values

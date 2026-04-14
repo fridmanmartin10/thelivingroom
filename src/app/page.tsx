@@ -5,6 +5,8 @@ import Image from "next/image";
 import {
   UNITS,
   FEATURES,
+  AMENITIES,
+  AMENITY_IMAGES,
   CONTACT,
   PLACEHOLDER_IMAGES,
   formatCurrency,
@@ -148,45 +150,46 @@ function About() {
   return (
     <section id="about" className="py-24 px-8 max-w-[1200px] mx-auto">
       <p className="text-[11px] tracking-[4px] uppercase text-gold font-semibold mb-3">
-        La Propiedad
+        Un edificio con alma de hotel
       </p>
       <h2 className="font-display text-[clamp(28px,4vw,44px)] font-normal mb-4 leading-[1.2]">
         Tu hotel, tu departamento
       </h2>
       <p className="text-[15px] text-muted max-w-[550px] leading-[1.7] font-light">
         The Living Room combina la privacidad de un hogar con los servicios de
-        un hotel boutique de primera categoría en Palermo Soho.
+        un hotel boutique de primera categoría en el corazón de Palermo Soho.
       </p>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 mt-12 items-start">
         <div className="space-y-4">
           <p className="text-mid leading-[1.8] text-[15px]">
-            Con <strong className="font-semibold text-black">40 departamentos totalmente amoblados y equipados</strong>,
-            cada unidad fue diseñada con identidad propia: materiales nobles de primera categoría,
-            equipamiento completo y atención al mínimo detalle. Desde la ropa de cama de algodón
-            egipcio hasta los electrodomésticos de última generación.
+            Con <strong className="font-semibold text-black">40 departamentos totalmente amoblados y equipados</strong> con
+            materiales de primera categoría, cada unidad fue diseñada con identidad propia:
+            materiales nobles, equipamiento completo y atención al mínimo detalle. Desde la
+            ropa de cama premium hasta los electrodomésticos de última generación.
           </p>
           <p className="text-mid leading-[1.8] text-[15px]">
             No es un hotel convencional — es tu espacio personal en Buenos Aires.
             Operamos con tecnología Cloudbeds para self check-in, lo que te permite
             llegar a cualquier hora sin esperas ni burocracias. Tu código de acceso
-            te espera antes de que aterrices.
+            te espera en tu mail antes de que aterrices.
           </p>
           <p className="text-mid leading-[1.8] text-[15px]">
-            Ubicados a pasos de los mejores restaurantes, bares de especialidad,
-            galerías de arte y tiendas de diseño de Palermo Soho, con conectividad
+            Ubicados en Palermo Soho, a pasos de los mejores restaurantes, bares de
+            especialidad, galerías de arte y tiendas de diseño, con conectividad
             directa al subte y las principales avenidas de Buenos Aires.
           </p>
 
           {/* Stats */}
-          <div className="grid grid-cols-3 gap-4 pt-6">
+          <div className="grid grid-cols-4 gap-4 pt-6">
             {[
               { num: "40", label: "Departamentos" },
               { num: "2", label: "Tipologías" },
+              { num: "1000m²", label: "Amenities" },
               { num: "24/7", label: "Atención" },
             ].map((s) => (
               <div key={s.label} className="text-center py-4 bg-cream">
-                <p className="font-display text-[28px] text-black">{s.num}</p>
+                <p className="font-display text-[24px] text-black">{s.num}</p>
                 <p className="text-[10px] tracking-[2px] uppercase text-muted mt-1">
                   {s.label}
                 </p>
@@ -212,23 +215,69 @@ function About() {
   );
 }
 
-// ─── Gallery Banner ──────────────────────────────────────────────────────────
-function GalleryBanner() {
-  const images = [
-    PLACEHOLDER_IMAGES.interior1,
-    PLACEHOLDER_IMAGES.lobby,
-    PLACEHOLDER_IMAGES.interior2,
-    PLACEHOLDER_IMAGES.pool,
-  ];
-
+// ─── Amenities Gallery ───────────────────────────────────────────────────────
+function AmenitiesGallery() {
   return (
-    <section className="py-2 bg-cream">
+    <section id="amenities" className="py-24 px-8 bg-cream">
+      <div className="max-w-[1200px] mx-auto">
+        <p className="text-[11px] tracking-[4px] uppercase text-gold font-semibold mb-3">
+          Amenities
+        </p>
+        <h2 className="font-display text-[clamp(28px,4vw,44px)] font-normal mb-4 leading-[1.2]">
+          Espacios que completan la experiencia
+        </h2>
+        <p className="text-[15px] text-muted max-w-[550px] leading-[1.7] font-light mb-10">
+          Más de 1.000 m² de amenities pensados para el bienestar y el disfrute
+          de nuestros huéspedes.
+        </p>
+
+        {/* Amenity photos grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
+          {AMENITY_IMAGES.map((img) => (
+            <div key={img.label} className="relative aspect-[16/10] overflow-hidden group">
+              <Image
+                src={img.src}
+                alt={img.label}
+                fill
+                className="object-cover group-hover:scale-105 transition-transform duration-700"
+                sizes="(max-width: 768px) 100vw, 50vw"
+              />
+              <div className="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors" />
+              <div className="absolute bottom-6 left-6">
+                <span className="bg-white/90 text-black px-4 py-2 text-[12px] tracking-[1.5px] uppercase font-semibold">
+                  {img.label}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Amenities list */}
+        <div className="flex flex-wrap gap-3">
+          {AMENITIES.map((a) => (
+            <span
+              key={a}
+              className="py-2.5 px-5 border border-black/[0.08] bg-white text-[13px] text-mid"
+            >
+              {a}
+            </span>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── Exterior Gallery ────────────────────────────────────────────────────────
+function ExteriorGallery() {
+  return (
+    <section className="py-2">
       <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-        {images.map((img, i) => (
+        {["/images/exterior1.jpeg", "/images/exterior2.jpeg", "/images/exterior3.jpeg", "/images/exterior4.jpeg"].map((img, i) => (
           <div key={i} className="relative aspect-[4/3] overflow-hidden">
             <Image
               src={img}
-              alt={`The Living Room - Vista ${i + 1}`}
+              alt={`The Living Room - Exterior ${i + 1}`}
               fill
               className="object-cover hover:scale-105 transition-transform duration-700"
               sizes="(max-width: 768px) 50vw, 25vw"
@@ -981,8 +1030,9 @@ export default function Home() {
       <Nav scrolled={scrolled} onNav={navigateTo} />
       <Hero onNav={navigateTo} />
       <About />
-      <GalleryBanner />
+      <ExteriorGallery />
       <UnitsSection onSelect={setSelectedUnit} />
+      <AmenitiesGallery />
       <AvailabilitySection onNav={navigateTo} />
       <Footer />
       <FloatingWhatsApp />
