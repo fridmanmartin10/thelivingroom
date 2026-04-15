@@ -72,10 +72,10 @@ export async function POST(request: NextRequest) {
           <div class="gold-line"></div>
           <p style="font-size: 14px;">Si tenés alguna consulta, no dudes en contactarnos por WhatsApp o email.</p>
           <p style="font-size: 14px;">¡Te esperamos!</p>
-          <p style="font-size: 14px; color: #C9A96E;">Equipo The Living Room</p>
+          <p style="font-size: 14px; color: #C9A96E;">Equipo The Living</p>
         </div>
         <div class="footer">
-          <p>The Living Room &middot; Palermo Soho, Buenos Aires</p>
+          <p>The Living &middot; Palermo Soho, Buenos Aires</p>
           <p>${SITE_CONFIG.email} &middot; ${SITE_CONFIG.phone}</p>
         </div>
       </div>
@@ -97,9 +97,9 @@ export async function POST(request: NextRequest) {
       });
 
       await transporter.sendMail({
-        from: `"The Living Room" <${SITE_CONFIG.email_smtp.from}>`,
+        from: `"The Living" <${SITE_CONFIG.email_smtp.from}>`,
         to: email,
-        subject: `Confirmación de Reserva - The Living Room | ${checkIn}`,
+        subject: `Confirmación de Reserva - The Living | ${checkIn}`,
         html: htmlContent,
       });
 
