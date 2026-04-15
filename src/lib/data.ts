@@ -1,13 +1,12 @@
 // ============================================================
 // THE LIVING ROOM — Data & Configuration
-// Update these values with real information when ready
+// Real unit data from HAAUS booking engine
 // ============================================================
 
-export interface Unit {
-  id: number;
+export interface UnitType {
+  id: string;
   name: string;
-  type: "Studio" | "2 Ambientes";
-  floor: string;
+  type: "Studio" | "2 Ambientes" | "2 Ambientes Suite";
   m2: number;
   maxGuests: number;
   beds: string;
@@ -15,10 +14,16 @@ export interface Unit {
   basePrice: number;
   images: string[];
   description: string;
+  unitNumbers: string[];
+  totalUnits: number;
 }
 
-// TODO: Replace with real property photos when ready
-// Currently using HAAUS reference photos as mockup placeholders
+// Pricing constants
+export const CLEANING_FEE = 25; // USD 25 por estadía, se cobra al check-out
+
+// Company info
+export const COMPANY_NAME = "The Living Group S.R.L.";
+
 export const PLACEHOLDER_IMAGES = {
   hero: "/images/hero.jpeg",
   lobby: "/images/investment.jpeg",
@@ -36,88 +41,132 @@ export const PLACEHOLDER_IMAGES = {
   rooftop: "/images/rooftop.jpeg",
 };
 
-// TODO: Replace with real units when ready.
-// Each unit should have real photos, descriptions, and pricing.
-export const UNITS: Unit[] = [
+// ─── Real Unit Types ────────────────────────────────────────────────────────
+export const UNIT_TYPES: UnitType[] = [
   {
-    id: 1,
-    name: "Studio Soho",
+    id: "studio",
+    name: "Studio",
     type: "Studio",
-    floor: "1°",
-    m2: 36,
+    m2: 35,
     maxGuests: 2,
     beds: "1 Queen",
-    amenities: ["Kitchenette", "Smart TV", "A/C", "Wi-Fi", "Caja fuerte"],
-    basePrice: 95,
-    images: [PLACEHOLDER_IMAGES.interior1, PLACEHOLDER_IMAGES.kitchen, PLACEHOLDER_IMAGES.bathroom],
-    description: "Studio moderno y luminoso con vista a la calle. Diseño minimalista con materiales premium.",
+    amenities: [
+      "Kitchenette completa",
+      "Smart TV",
+      "A/C frío-calor",
+      "Wi-Fi Premium",
+      "Caja fuerte",
+      "Ropa de cama premium",
+      "Amenities de baño",
+      "Escritorio de trabajo",
+    ],
+    basePrice: 80,
+    images: [
+      "/images/studio-1.jpeg",
+      "/images/studio-2.jpeg",
+      "/images/studio-3.jpeg",
+      "/images/studio-4.jpeg",
+    ],
+    description:
+      "Studio de diseño con 35m² de confort absoluto. Materiales nobles, equipamiento completo y atención al mínimo detalle. Kitchenette integrada, cama queen premium y espacio de trabajo. Ideal para viajeros solos o parejas que buscan la mejor relación calidad-precio en Palermo Soho.",
+    unitNumbers: [
+      "202", "204", "205", "208", "210", "211",
+      "402", "403", "405", "409", "412",
+      "501", "502", "503", "504", "505", "506", "507", "508", "509", "510", "511", "512",
+      "603", "604", "605", "606", "607", "608", "609", "610", "611", "612",
+      "701", "702", "703", "704", "705", "706", "707", "708", "709", "710", "711",
+      "805",
+    ],
+    totalUnits: 38,
   },
   {
-    id: 2,
-    name: "Studio Jardín",
-    type: "Studio",
-    floor: "PB",
-    m2: 36,
-    maxGuests: 2,
-    beds: "1 Queen",
-    amenities: ["Patio privado", "Kitchenette", "Smart TV", "A/C", "Wi-Fi"],
-    basePrice: 100,
-    images: [PLACEHOLDER_IMAGES.interior3, PLACEHOLDER_IMAGES.kitchen, PLACEHOLDER_IMAGES.bathroom],
-    description: "Planta baja con salida directa al jardín interno. Luz natural todo el día.",
-  },
-  {
-    id: 3,
-    name: "Studio Luz",
-    type: "Studio",
-    floor: "3°",
-    m2: 36,
-    maxGuests: 2,
-    beds: "1 Queen",
-    amenities: ["Balcón", "Kitchenette", "Smart TV", "A/C", "Wi-Fi"],
-    basePrice: 105,
-    images: [PLACEHOLDER_IMAGES.bedroom, PLACEHOLDER_IMAGES.kitchen, PLACEHOLDER_IMAGES.balcony],
-    description: "Orientación norte con balcón. Inundado de luz natural durante todo el día.",
-  },
-  {
-    id: 4,
-    name: "2 Amb. Palermo",
+    id: "2amb",
+    name: "2 Ambientes",
     type: "2 Ambientes",
-    floor: "2°",
+    m2: 50,
+    maxGuests: 2,
+    beds: "1 King",
+    amenities: [
+      "Living-comedor separado",
+      "Cocina completa",
+      "Smart TV",
+      "A/C frío-calor",
+      "Wi-Fi Premium",
+      "Lavarropas",
+      "Caja fuerte",
+      "Ropa de cama premium",
+      "Amenities de baño",
+    ],
+    basePrice: 110,
+    images: [
+      "/images/suite-1.jpeg",
+      "/images/suite-2.jpeg",
+    ],
+    description:
+      "Departamento de 2 ambientes con 50m² y living independiente. Diseño de autor con living-comedor amplio, cocina completa y dormitorio separado con cama king. El espacio perfecto para quienes buscan la comodidad de un hogar con los servicios de un hotel boutique.",
+    unitNumbers: ["207", "607", "707"],
+    totalUnits: 3,
+  },
+  {
+    id: "2amb-x4",
+    name: "2 Ambientes Superior",
+    type: "2 Ambientes Suite",
     m2: 50,
     maxGuests: 4,
     beds: "1 King + Sofá cama",
-    amenities: ["Living separado", "Cocina completa", "Smart TV", "A/C", "Wi-Fi", "Lavarropas"],
-    basePrice: 145,
-    images: [PLACEHOLDER_IMAGES.living, PLACEHOLDER_IMAGES.bedroom, PLACEHOLDER_IMAGES.kitchen],
-    description: "Amplio dos ambientes con living independiente. Ideal para familias o estadías largas.",
-  },
-  {
-    id: 5,
-    name: "2 Amb. Terraza",
-    type: "2 Ambientes",
-    floor: "5°",
-    m2: 50,
-    maxGuests: 4,
-    beds: "1 King + Sofá cama",
-    amenities: ["Terraza privada", "Cocina completa", "Smart TV x2", "A/C", "Wi-Fi", "Lavarropas", "Parrilla"],
-    basePrice: 175,
-    images: [PLACEHOLDER_IMAGES.rooftop, PLACEHOLDER_IMAGES.living, PLACEHOLDER_IMAGES.bedroom],
-    description: "Piso alto con terraza propia y vista a los techos de Palermo. Parrilla y espacio al aire libre.",
-  },
-  {
-    id: 6,
-    name: "2 Amb. Design",
-    type: "2 Ambientes",
-    floor: "3°",
-    m2: 50,
-    maxGuests: 4,
-    beds: "1 King + 2 Singles",
-    amenities: ["Balcón", "Cocina completa", "Smart TV x2", "A/C", "Wi-Fi", "Lavarropas", "Bañera"],
-    basePrice: 160,
-    images: [PLACEHOLDER_IMAGES.interior2, PLACEHOLDER_IMAGES.bathroom, PLACEHOLDER_IMAGES.living],
-    description: "Diseño de autor con bañera independiente. Dos ambientes con personalidad única.",
+    amenities: [
+      "Living-comedor separado",
+      "Cocina completa",
+      "Smart TV x2",
+      "A/C frío-calor",
+      "Wi-Fi Premium",
+      "Lavarropas",
+      "Caja fuerte",
+      "Ropa de cama premium",
+      "Amenities de baño",
+      "Capacidad 4 huéspedes",
+    ],
+    basePrice: 140,
+    images: [
+      "/images/2amb4-1.jpeg",
+      "/images/2amb4-2.jpeg",
+    ],
+    description:
+      "El departamento más amplio y versátil del edificio. 50m² con living-comedor, cocina completa, dormitorio con cama king y sofá cama en el living. Capacidad para hasta 4 huéspedes — ideal para familias o grupos de amigos. Ubicados en el 8° piso con las mejores vistas.",
+    unitNumbers: ["802", "803", "806"],
+    totalUnits: 3,
   },
 ];
+
+// Legacy compatibility: flat array for components that use Unit[]
+export interface Unit {
+  id: number;
+  name: string;
+  type: "Studio" | "2 Ambientes" | "2 Ambientes Suite";
+  floor: string;
+  m2: number;
+  maxGuests: number;
+  beds: string;
+  amenities: string[];
+  basePrice: number;
+  images: string[];
+  description: string;
+}
+
+// We now show unit TYPES, not individual units
+export const UNITS: Unit[] = UNIT_TYPES.map((ut, i) => ({
+  id: i + 1,
+  name: ut.name,
+  type: ut.type,
+  floor: "",
+  m2: ut.m2,
+  maxGuests: ut.maxGuests,
+  beds: ut.beds,
+  amenities: ut.amenities,
+  basePrice: ut.basePrice,
+  images: ut.images,
+  description: ut.description,
+}));
 
 export const FEATURES = [
   { icon: "🔑", title: "Self Check-in", desc: "Acceso 24/7 con código digital" },
@@ -169,4 +218,11 @@ export const tomorrowStr = () => {
   const d = new Date();
   d.setDate(d.getDate() + 1);
   return d.toISOString().split("T")[0];
+};
+
+// Calculate total price — cleaning fee USD 25 se cobra aparte al check-out
+export const calculatePricing = (basePrice: number, nights: number) => {
+  const subtotal = basePrice * nights;
+  const total = subtotal;
+  return { subtotal, cleaningFee: CLEANING_FEE, total };
 };

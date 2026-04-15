@@ -3,18 +3,20 @@
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import {
-  UNITS,
+  UNIT_TYPES,
   FEATURES,
   AMENITIES,
   AMENITY_IMAGES,
   CONTACT,
   PLACEHOLDER_IMAGES,
+  COMPANY_NAME,
   formatCurrency,
   nightsBetween,
   todayStr,
   tomorrowStr,
+  calculatePricing,
 } from "@/lib/data";
-import type { Unit } from "@/lib/data";
+import type { UnitType } from "@/lib/data";
 
 // ─── Nav ─────────────────────────────────────────────────────────────────────
 function Nav({ scrolled, onNav }: { scrolled: boolean; onNav: (id: string) => void }) {
@@ -40,6 +42,7 @@ function Nav({ scrolled, onNav }: { scrolled: boolean; onNav: (id: string) => vo
         {[
           { id: "about", label: "La Propiedad" },
           { id: "units", label: "Unidades" },
+          { id: "amenities", label: "Amenities" },
           { id: "contact", label: "Contacto" },
         ].map((item) => (
           <a
@@ -70,6 +73,7 @@ function Nav({ scrolled, onNav }: { scrolled: boolean; onNav: (id: string) => vo
             {[
               { id: "about", label: "La Propiedad" },
               { id: "units", label: "Unidades" },
+              { id: "amenities", label: "Amenities" },
               { id: "contact", label: "Contacto" },
             ].map((item) => (
               <a
@@ -121,7 +125,7 @@ function Hero({ onNav }: { onNav: (id: string) => void }) {
         corazón de <em className="italic text-gold">Palermo</em>
       </h1>
       <p className="mt-5 text-[16px] text-white/70 font-light tracking-[0.5px] max-w-[500px] relative z-10 animate-fade-up-d2">
-        40 departamentos premium totalmente equipados. Diseño de autor,
+        44 departamentos premium totalmente equipados. Diseño de autor,
         servicios de hotel boutique y la mejor ubicación.
       </p>
       <div className="mt-10 flex gap-4 relative z-10 animate-fade-up-d3 flex-col sm:flex-row">
@@ -163,7 +167,7 @@ function About() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 mt-12 items-start">
         <div className="space-y-4">
           <p className="text-mid leading-[1.8] text-[15px]">
-            Con <strong className="font-semibold text-black">40 departamentos totalmente amoblados y equipados</strong> con
+            Con <strong className="font-semibold text-black">44 departamentos totalmente amoblados y equipados</strong> con
             materiales de primera categoría, cada unidad fue diseñada con identidad propia:
             materiales nobles, equipamiento completo y atención al mínimo detalle. Desde la
             ropa de cama premium hasta los electrodomésticos de última generación.
@@ -183,8 +187,8 @@ function About() {
           {/* Stats */}
           <div className="grid grid-cols-4 gap-4 pt-6">
             {[
-              { num: "40", label: "Departamentos" },
-              { num: "2", label: "Tipologías" },
+              { num: "44", label: "Departamentos" },
+              { num: "3", label: "Tipologías" },
               { num: "1000m²", label: "Amenities" },
               { num: "24/7", label: "Atención" },
             ].map((s) => (
@@ -289,33 +293,36 @@ function ExteriorGallery() {
   );
 }
 
-// ─── Unit Card ───────────────────────────────────────────────────────────────
-function UnitCard({ unit, onClick }: { unit: Unit; onClick: () => void }) {
+// ─── Unit Type Card ─────────────────────────────────────────────────────────
+function UnitTypeCard({ unitType, onClick }: { unitType: UnitType; onClick: () => void }) {
   return (
     <div
       className="border border-black/[0.06] overflow-hidden cursor-pointer transition-all duration-[350ms] bg-white hover:border-gold hover:-translate-y-[3px] hover:shadow-[0_12px_40px_rgba(0,0,0,0.06)]"
       onClick={onClick}
     >
-      <div className="h-[200px] relative overflow-hidden">
+      <div className="h-[260px] relative overflow-hidden">
         <div className="absolute top-4 left-4 z-10 bg-black text-white text-[10px] tracking-[2px] uppercase px-3.5 py-1.5 font-semibold">
-          {unit.type}
+          {unitType.type}
+        </div>
+        <div className="absolute top-4 right-4 z-10 bg-white/90 text-black text-[10px] tracking-[1px] px-3 py-1.5 font-medium">
+          {unitType.totalUnits} unidades
         </div>
         <Image
-          src={unit.images[0]}
-          alt={unit.name}
+          src={unitType.images[0]}
+          alt={unitType.name}
           fill
           className="object-cover hover:scale-105 transition-transform duration-700"
-          sizes="(max-width: 768px) 100vw, 340px"
+          sizes="(max-width: 768px) 100vw, 400px"
         />
       </div>
       <div className="p-6">
-        <div className="font-display text-[20px] mb-1.5">{unit.name}</div>
+        <div className="font-display text-[22px] mb-1.5">{unitType.name}</div>
         <div className="text-[13px] text-muted mb-3">
-          {unit.floor} &middot; {unit.m2}m&sup2; &middot; Hasta {unit.maxGuests}{" "}
-          huéspedes &middot; {unit.beds}
+          {unitType.m2}m&sup2; &middot; Hasta {unitType.maxGuests}{" "}
+          {unitType.maxGuests === 1 ? "huésped" : "huéspedes"} &middot; {unitType.beds}
         </div>
         <div className="flex gap-2 flex-wrap mb-4">
-          {unit.amenities.slice(0, 4).map((a) => (
+          {unitType.amenities.slice(0, 4).map((a) => (
             <span
               key={a}
               className="text-[11px] px-2.5 py-1 bg-cream text-mid tracking-[0.3px]"
@@ -323,21 +330,21 @@ function UnitCard({ unit, onClick }: { unit: Unit; onClick: () => void }) {
               {a}
             </span>
           ))}
-          {unit.amenities.length > 4 && (
+          {unitType.amenities.length > 4 && (
             <span className="text-[11px] px-2.5 py-1 bg-cream text-mid">
-              +{unit.amenities.length - 4}
+              +{unitType.amenities.length - 4}
             </span>
           )}
         </div>
         <div className="flex items-baseline justify-between pt-4 border-t border-black/[0.06]">
           <div>
             <span className="font-display text-[22px]">
-              {formatCurrency(unit.basePrice)}
+              {formatCurrency(unitType.basePrice)}
             </span>
             <span className="text-[12px] text-muted"> / noche</span>
           </div>
           <span className="text-[11px] tracking-[1px] uppercase text-gold font-medium">
-            Ver detalle &rarr;
+            Reservar &rarr;
           </span>
         </div>
       </div>
@@ -346,12 +353,7 @@ function UnitCard({ unit, onClick }: { unit: Unit; onClick: () => void }) {
 }
 
 // ─── Units Section ───────────────────────────────────────────────────────────
-function UnitsSection({ onSelect }: { onSelect: (u: Unit) => void }) {
-  const [filter, setFilter] = useState("Todas");
-  const types = ["Todas", "Studio", "2 Ambientes"];
-  const filtered =
-    filter === "Todas" ? UNITS : UNITS.filter((u) => u.type === filter);
-
+function UnitsSection({ onSelect }: { onSelect: (u: UnitType) => void }) {
   return (
     <section id="units" className="py-24 px-8 max-w-[1200px] mx-auto">
       <p className="text-[11px] tracking-[4px] uppercase text-gold font-semibold mb-3">
@@ -361,30 +363,22 @@ function UnitsSection({ onSelect }: { onSelect: (u: Unit) => void }) {
         Elegí tu espacio ideal
       </h2>
       <p className="text-[15px] text-muted max-w-[550px] leading-[1.7] font-light">
-        Studios de 36m&sup2; y departamentos de 2 ambientes de 50m&sup2;, cada
-        uno con su personalidad. Todos equipados con materiales de primera.
+        3 tipologías pensadas para cada tipo de viajero. Studios de 35m&sup2;
+        y departamentos de 2 ambientes de 50m&sup2;, todos equipados con materiales de primera.
       </p>
 
-      <div className="flex gap-3 my-8 flex-wrap">
-        {types.map((t) => (
-          <button
-            key={t}
-            onClick={() => setFilter(t)}
-            className={`px-6 py-2.5 border text-[12px] tracking-[1px] uppercase font-medium transition-all duration-200 cursor-pointer ${
-              filter === t
-                ? "bg-black text-white border-black"
-                : "bg-transparent border-black/[0.12] hover:border-black/30"
-            }`}
-          >
-            {t}
-          </button>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-10">
+        {UNIT_TYPES.map((ut) => (
+          <UnitTypeCard key={ut.id} unitType={ut} onClick={() => onSelect(ut)} />
         ))}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filtered.map((u) => (
-          <UnitCard key={u.id} unit={u} onClick={() => onSelect(u)} />
-        ))}
+      {/* Unit count summary */}
+      <div className="mt-10 text-center">
+        <p className="text-[13px] text-muted">
+          <span className="font-semibold text-black">44 departamentos</span> distribuidos en 8 pisos &mdash;{" "}
+          38 Studios, 3 Dos Ambientes y 3 Dos Ambientes Superior
+        </p>
       </div>
     </section>
   );
@@ -392,16 +386,16 @@ function UnitsSection({ onSelect }: { onSelect: (u: Unit) => void }) {
 
 // ─── Unit Detail Modal with Booking ──────────────────────────────────────────
 function UnitModal({
-  unit,
+  unitType,
   onClose,
 }: {
-  unit: Unit;
+  unitType: UnitType;
   onClose: () => void;
 }) {
   const [checkIn, setCheckIn] = useState(todayStr());
   const [checkOut, setCheckOut] = useState(tomorrowStr());
   const [guests, setGuests] = useState(1);
-  const [payMethod, setPayMethod] = useState<"guarantee" | "full">("guarantee");
+  const [payMethod, setPayMethod] = useState<"card" | "hotel">("card");
   const [cardNumber, setCardNumber] = useState("");
   const [cardExp, setCardExp] = useState("");
   const [cardCvc, setCardCvc] = useState("");
@@ -414,9 +408,10 @@ function UnitModal({
   const [step, setStep] = useState<"details" | "booking" | "confirmed">("details");
   const [availStatus, setAvailStatus] = useState<"idle" | "checking" | "available" | "unavailable">("idle");
   const [imageIdx, setImageIdx] = useState(0);
+  const confCodeRef = useRef(`TLR-${Math.random().toString(36).substring(2, 8).toUpperCase()}`);
 
   const nights = nightsBetween(checkIn, checkOut);
-  const total = unit.basePrice * nights;
+  const pricing = calculatePricing(unitType.basePrice, nights);
 
   const checkAvailability = async () => {
     setAvailStatus("checking");
@@ -424,7 +419,7 @@ function UnitModal({
       const res = await fetch("/api/check-availability", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ unitType: unit.type === "Studio" ? "studio" : "dos-ambientes", checkIn, checkOut }),
+        body: JSON.stringify({ unitType: unitType.id, checkIn, checkOut }),
       });
       const data = await res.json();
       setAvailStatus(data.available ? "available" : "unavailable");
@@ -436,20 +431,23 @@ function UnitModal({
   const handleBook = async () => {
     setLoading(true);
     try {
-      await fetch("/api/create-payment-intent", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          amount: total,
-          paymentMethod: payMethod,
-          email,
-          firstName,
-          lastName,
-          unitType: unit.type === "Studio" ? "studio" : "dos-ambientes",
-          checkIn,
-          checkOut,
-        }),
-      });
+      // Only create payment intent for card payments
+      if (payMethod === "card") {
+        await fetch("/api/create-payment-intent", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            amount: pricing.total,
+            paymentMethod: "full",
+            email,
+            firstName,
+            lastName,
+            unitType: unitType.id,
+            checkIn,
+            checkOut,
+          }),
+        });
+      }
 
       await fetch("/api/send-confirmation", {
         method: "POST",
@@ -459,11 +457,17 @@ function UnitModal({
           firstName,
           lastName,
           phone,
-          unitType: unit.type === "Studio" ? "studio" : "dos-ambientes",
+          unitType: unitType.id,
+          unitName: unitType.name,
           checkIn,
           checkOut,
           guests,
+          nights,
           paymentMethod: payMethod,
+          subtotal: pricing.subtotal,
+          cleaningFee: pricing.cleaningFee,
+          total: pricing.total,
+          bookingCode: confCodeRef.current,
         }),
       });
 
@@ -474,8 +478,6 @@ function UnitModal({
       setLoading(false);
     }
   };
-
-  const confCode = `TLR-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
 
   return (
     <div
@@ -500,28 +502,36 @@ function UnitModal({
               Hemos enviado un email de confirmación a <strong className="text-black">{email}</strong>.
             </p>
             <p className="font-display text-[28px] tracking-[4px] text-gold mb-8">
-              {confCode}
+              {confCodeRef.current}
             </p>
             <div className="text-left bg-cream p-8 mb-8">
               {[
-                ["Unidad", unit.name],
-                ["Tipo", `${unit.type} · ${unit.m2}m²`],
+                ["Tipo de unidad", unitType.name],
+                ["Superficie", `${unitType.m2}m²`],
                 ["Check-in", checkIn],
                 ["Check-out", checkOut],
                 ["Noches", String(nights)],
                 ["Huéspedes", String(guests)],
-                ["Pago", payMethod === "guarantee" ? "Tarjeta en garantía" : "Pago completo"],
-                ["Total", formatCurrency(total)],
+                ["Pago", payMethod === "card" ? "Tarjeta de crédito" : "Pago en el hotel"],
+                ["Total estadía", formatCurrency(pricing.total)],
               ].map(([label, val]) => (
                 <div
                   key={label}
-                  className="flex justify-between py-2 text-[14px] [&:not(:last-child)]:border-b [&:not(:last-child)]:border-black/[0.06]"
+                  className={`flex justify-between py-2 text-[14px] [&:not(:last-child)]:border-b [&:not(:last-child)]:border-black/[0.06] ${
+                    label === "Total estadía" ? "font-bold text-[16px]" : ""
+                  }`}
                 >
                   <span className="text-muted">{label}</span>
                   <span className="font-medium">{val}</span>
                 </div>
               ))}
+              <p className="text-[12px] text-muted mt-3 pt-2 border-t border-black/[0.06]">
+                + USD {pricing.cleaningFee} de limpieza final (se abona al check-out)
+              </p>
             </div>
+            <p className="text-[13px] text-muted mb-6">
+              {COMPANY_NAME}
+            </p>
             <button
               onClick={onClose}
               className="bg-black text-white border-none px-10 py-4 text-[12px] tracking-[2.5px] uppercase font-semibold cursor-pointer transition-all hover:bg-charcoal"
@@ -532,17 +542,34 @@ function UnitModal({
         ) : (
           <>
             {/* ── Hero image with gallery ── */}
-            <div className="h-[280px] relative overflow-hidden bg-cream">
+            <div className="h-[320px] relative overflow-hidden bg-cream">
               <Image
-                src={unit.images[imageIdx] || unit.images[0]}
-                alt={unit.name}
+                src={unitType.images[imageIdx] || unitType.images[0]}
+                alt={unitType.name}
                 fill
                 className="object-cover"
                 sizes="860px"
               />
-              {unit.images.length > 1 && (
+              {/* Navigation arrows */}
+              {unitType.images.length > 1 && (
+                <>
+                  <button
+                    onClick={() => setImageIdx((prev) => (prev - 1 + unitType.images.length) % unitType.images.length)}
+                    className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/80 hover:bg-white border-none flex items-center justify-center cursor-pointer transition-colors text-lg"
+                  >
+                    &#8249;
+                  </button>
+                  <button
+                    onClick={() => setImageIdx((prev) => (prev + 1) % unitType.images.length)}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/80 hover:bg-white border-none flex items-center justify-center cursor-pointer transition-colors text-lg"
+                  >
+                    &#8250;
+                  </button>
+                </>
+              )}
+              {unitType.images.length > 1 && (
                 <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-                  {unit.images.map((_, i) => (
+                  {unitType.images.map((_, i) => (
                     <button
                       key={i}
                       onClick={() => setImageIdx(i)}
@@ -553,24 +580,36 @@ function UnitModal({
                   ))}
                 </div>
               )}
+              {/* Image counter */}
+              <div className="absolute top-4 left-4 bg-black/60 text-white text-[11px] px-3 py-1.5 tracking-[1px]">
+                {imageIdx + 1} / {unitType.images.length}
+              </div>
             </div>
 
             {/* ── Modal body ── */}
             <div className="p-10 md:p-10 max-md:p-6">
-              <h2 className="font-display text-[32px] mb-1">{unit.name}</h2>
-              <p className="text-[12px] tracking-[2px] text-gold uppercase mb-4">
-                {unit.type} &middot; {unit.floor} &middot; {unit.m2}m&sup2;
-              </p>
+              <div className="flex items-start justify-between gap-4 flex-wrap">
+                <div>
+                  <h2 className="font-display text-[32px] mb-1">{unitType.name}</h2>
+                  <p className="text-[12px] tracking-[2px] text-gold uppercase mb-4">
+                    {unitType.type} &middot; {unitType.m2}m&sup2; &middot; {unitType.totalUnits} unidades disponibles
+                  </p>
+                </div>
+                <div className="text-right">
+                  <span className="font-display text-[28px]">{formatCurrency(unitType.basePrice)}</span>
+                  <span className="text-[13px] text-muted"> / noche</span>
+                </div>
+              </div>
               <p className="text-mid leading-[1.7] text-[15px] mb-6">
-                {unit.description}
+                {unitType.description}
               </p>
 
               {/* Details grid */}
               <div className="grid grid-cols-3 max-md:grid-cols-1 gap-4 mb-8">
                 {[
-                  { label: "Superficie", value: `${unit.m2} m²` },
-                  { label: "Huéspedes", value: `Hasta ${unit.maxGuests}` },
-                  { label: "Camas", value: unit.beds },
+                  { label: "Superficie", value: `${unitType.m2} m²` },
+                  { label: "Huéspedes", value: `Hasta ${unitType.maxGuests}` },
+                  { label: "Camas", value: unitType.beds },
                 ].map((d) => (
                   <div key={d.label} className="p-4 bg-cream text-center">
                     <div className="text-[10px] tracking-[2px] uppercase text-muted mb-1">
@@ -583,10 +622,10 @@ function UnitModal({
 
               {/* Amenities */}
               <p className="text-[12px] tracking-[2px] uppercase text-muted mb-3">
-                Amenities
+                Amenities de la unidad
               </p>
               <div className="flex gap-2 flex-wrap mb-8">
-                {unit.amenities.map((a) => (
+                {unitType.amenities.map((a) => (
                   <span
                     key={a}
                     className="py-2 px-4 border border-black/[0.08] text-[13px]"
@@ -636,7 +675,7 @@ function UnitModal({
                       onChange={(e) => setGuests(Number(e.target.value))}
                       className="py-3.5 px-4 border border-black/[0.1] text-[14px] bg-white outline-none transition-colors focus:border-gold"
                     >
-                      {Array.from({ length: unit.maxGuests }, (_, i) => i + 1).map((n) => (
+                      {Array.from({ length: unitType.maxGuests }, (_, i) => i + 1).map((n) => (
                         <option key={n} value={n}>
                           {n} {n === 1 ? "huésped" : "huéspedes"}
                         </option>
@@ -648,15 +687,18 @@ function UnitModal({
                   <div className="bg-cream p-6 my-6">
                     <div className="flex justify-between mb-2 text-[14px]">
                       <span className="text-muted">
-                        {formatCurrency(unit.basePrice)} &times; {nights}{" "}
+                        {formatCurrency(unitType.basePrice)} &times; {nights}{" "}
                         {nights === 1 ? "noche" : "noches"}
                       </span>
-                      <span>{formatCurrency(total)}</span>
+                      <span>{formatCurrency(pricing.subtotal)}</span>
                     </div>
                     <div className="flex justify-between font-bold text-[18px] pt-3 border-t border-black/[0.1] mt-2">
                       <span>Total</span>
-                      <span>{formatCurrency(total)}</span>
+                      <span>{formatCurrency(pricing.total)}</span>
                     </div>
+                    <p className="text-[11px] text-muted mt-3">
+                      + USD {pricing.cleaningFee} de limpieza (se abona al check-out)
+                    </p>
                   </div>
 
                   {availStatus === "unavailable" && (
@@ -754,23 +796,23 @@ function UnitModal({
                     </div>
                   </div>
 
-                  {/* Payment method */}
+                  {/* Payment method - 3 options */}
                   <p className="text-[11px] tracking-[1.5px] uppercase text-muted mb-3 font-medium">
                     Método de pago
                   </p>
                   <div className="flex gap-3 mb-5 max-md:flex-col">
                     {[
                       {
-                        id: "guarantee" as const,
-                        icon: "🔒",
-                        label: "Tarjeta en Garantía",
-                        sub: "Pagás al hacer check-in",
+                        id: "card" as const,
+                        icon: "💳",
+                        label: "Pagar con Tarjeta",
+                        sub: "Aboná el total ahora online",
                       },
                       {
-                        id: "full" as const,
-                        icon: "💳",
-                        label: "Pago Completo",
-                        sub: "Aboná el total ahora",
+                        id: "hotel" as const,
+                        icon: "🏨",
+                        label: "Pagar en el Hotel",
+                        sub: "Aboná al hacer check-in",
                       },
                     ].map((m) => (
                       <div
@@ -793,62 +835,72 @@ function UnitModal({
                     ))}
                   </div>
 
-                  {/* Card inputs */}
-                  <div className="mb-4">
-                    <input
-                      type="text"
-                      value={cardNumber}
-                      onChange={(e) => setCardNumber(e.target.value)}
-                      placeholder="Número de tarjeta"
-                      className="w-full py-3.5 px-4 border border-black/[0.1] text-[14px] bg-white outline-none transition-colors focus:border-gold"
-                    />
-                    <div className="grid grid-cols-3 max-md:grid-cols-1 gap-3 mt-3">
+                  {/* Card inputs - only shown when card is selected */}
+                  {payMethod === "card" && (
+                    <div className="mb-4 animate-fade-in">
                       <input
                         type="text"
-                        value={cardExp}
-                        onChange={(e) => setCardExp(e.target.value)}
-                        placeholder="MM / AA"
-                        className="py-3.5 px-4 border border-black/[0.1] text-[14px] bg-white outline-none transition-colors focus:border-gold"
+                        value={cardNumber}
+                        onChange={(e) => setCardNumber(e.target.value)}
+                        placeholder="Número de tarjeta"
+                        className="w-full py-3.5 px-4 border border-black/[0.1] text-[14px] bg-white outline-none transition-colors focus:border-gold"
                       />
-                      <input
-                        type="text"
-                        value={cardCvc}
-                        onChange={(e) => setCardCvc(e.target.value)}
-                        placeholder="CVC"
-                        className="py-3.5 px-4 border border-black/[0.1] text-[14px] bg-white outline-none transition-colors focus:border-gold"
-                      />
-                      <input
-                        type="text"
-                        value={cardName}
-                        onChange={(e) => setCardName(e.target.value)}
-                        placeholder="Titular"
-                        className="py-3.5 px-4 border border-black/[0.1] text-[14px] bg-white outline-none transition-colors focus:border-gold"
-                      />
+                      <div className="grid grid-cols-3 max-md:grid-cols-1 gap-3 mt-3">
+                        <input
+                          type="text"
+                          value={cardExp}
+                          onChange={(e) => setCardExp(e.target.value)}
+                          placeholder="MM / AA"
+                          className="py-3.5 px-4 border border-black/[0.1] text-[14px] bg-white outline-none transition-colors focus:border-gold"
+                        />
+                        <input
+                          type="text"
+                          value={cardCvc}
+                          onChange={(e) => setCardCvc(e.target.value)}
+                          placeholder="CVC"
+                          className="py-3.5 px-4 border border-black/[0.1] text-[14px] bg-white outline-none transition-colors focus:border-gold"
+                        />
+                        <input
+                          type="text"
+                          value={cardName}
+                          onChange={(e) => setCardName(e.target.value)}
+                          placeholder="Titular"
+                          className="py-3.5 px-4 border border-black/[0.1] text-[14px] bg-white outline-none transition-colors focus:border-gold"
+                        />
+                      </div>
                     </div>
-                  </div>
+                  )}
+
+                  {/* Pay at hotel info */}
+                  {payMethod === "hotel" && (
+                    <div className="mb-4 p-4 bg-cream border border-gold/20 animate-fade-in">
+                      <p className="text-[13px] text-mid leading-[1.6]">
+                        <strong className="text-black">Pago en el hotel:</strong> Tu reserva quedará confirmada.
+                        Abonarás <strong className="text-black">{formatCurrency(pricing.total)}</strong> al
+                        momento del check-in + USD {pricing.cleaningFee} de limpieza al check-out. Aceptamos efectivo (USD), tarjeta de crédito y débito.
+                      </p>
+                    </div>
+                  )}
 
                   {/* Summary */}
                   <div className="bg-cream p-6 my-6">
                     <div className="flex justify-between mb-2 text-[14px]">
-                      <span className="text-muted">{unit.name}</span>
-                      <span>{unit.type} &middot; {unit.m2}m&sup2;</span>
+                      <span className="text-muted">{unitType.name}</span>
+                      <span>{unitType.type} &middot; {unitType.m2}m&sup2;</span>
                     </div>
                     <div className="flex justify-between mb-2 text-[14px]">
                       <span className="text-muted">
-                        {formatCurrency(unit.basePrice)} &times; {nights} noches
+                        {formatCurrency(unitType.basePrice)} &times; {nights} {nights === 1 ? "noche" : "noches"}
                       </span>
-                      <span>{formatCurrency(total)}</span>
+                      <span>{formatCurrency(pricing.subtotal)}</span>
                     </div>
                     <div className="flex justify-between font-bold text-[18px] pt-3 border-t border-black/[0.1] mt-2">
                       <span>Total</span>
-                      <span>{formatCurrency(total)}</span>
+                      <span>{formatCurrency(pricing.total)}</span>
                     </div>
-                    {payMethod === "guarantee" && (
-                      <p className="text-[11px] text-muted mt-2">
-                        * No se realizará ningún cobro ahora. Tu tarjeta queda
-                        como garantía.
-                      </p>
-                    )}
+                    <p className="text-[11px] text-muted mt-3">
+                      + USD {pricing.cleaningFee} de limpieza (se abona al check-out)
+                    </p>
                   </div>
 
                   <div className="flex gap-4">
@@ -866,14 +918,19 @@ function UnitModal({
                       {loading && (
                         <span className="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                       )}
-                      {payMethod === "guarantee"
-                        ? "Confirmar Reserva"
-                        : "Pagar y Confirmar"}
+                      {payMethod === "card"
+                        ? "Pagar y Confirmar"
+                        : "Confirmar Reserva"}
                     </button>
                   </div>
 
                   <p className="text-[11px] text-muted text-center mt-4">
-                    🔐 Pago procesado de forma segura con Stripe.
+                    {payMethod === "card"
+                      ? "Pago procesado de forma segura con Stripe."
+                      : "Tu reserva quedará confirmada al instante. Pagás al llegar."}
+                  </p>
+                  <p className="text-[10px] text-muted/60 text-center mt-2">
+                    {COMPANY_NAME}
                   </p>
                 </div>
               )}
@@ -944,7 +1001,7 @@ function Footer() {
         The Living Room<span className="text-gold">.</span>
       </div>
       <p className="text-[13px] text-muted max-w-[400px] mx-auto leading-[1.6] mb-6">
-        40 departamentos de diseño en el corazón de Palermo Soho.
+        44 departamentos de diseño en el corazón de Palermo Soho.
         Donde el confort se encuentra con el estilo porteño.
       </p>
       <div className="flex flex-col items-center gap-2 text-[13px] text-muted mb-8">
@@ -955,7 +1012,6 @@ function Footer() {
         </a>
       </div>
       <div className="flex justify-center gap-8 text-[12px] tracking-[1px]">
-        {/* TODO: Replace with real links */}
         <a
           href={`https://instagram.com/${CONTACT.instagram}`}
           target="_blank"
@@ -979,7 +1035,10 @@ function Footer() {
           Email
         </a>
       </div>
-      <div className="mt-12 pt-8 border-t border-white/10 text-[11px] text-muted/50">
+      <div className="mt-8 text-[11px] text-muted/40">
+        {COMPANY_NAME}
+      </div>
+      <div className="mt-4 pt-8 border-t border-white/10 text-[11px] text-muted/50">
         &copy; {new Date().getFullYear()} The Living Room. Todos los derechos reservados.
       </div>
     </footer>
@@ -1009,8 +1068,7 @@ function FloatingWhatsApp() {
 // ─── Main App ────────────────────────────────────────────────────────────────
 export default function Home() {
   const [scrolled, setScrolled] = useState(false);
-  const [selectedUnit, setSelectedUnit] = useState<Unit | null>(null);
-  const refs = useRef<Record<string, HTMLElement | null>>({});
+  const [selectedUnit, setSelectedUnit] = useState<UnitType | null>(null);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -1038,7 +1096,7 @@ export default function Home() {
       <FloatingWhatsApp />
 
       {selectedUnit && (
-        <UnitModal unit={selectedUnit} onClose={() => setSelectedUnit(null)} />
+        <UnitModal unitType={selectedUnit} onClose={() => setSelectedUnit(null)} />
       )}
     </div>
   );
