@@ -16,7 +16,7 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "The Living | Hotel Boutique en Palermo Soho",
+  title: "The Living Room | Hotel Boutique en Palermo Soho",
   description:
     "40 departamentos totalmente amoblados y equipados con materiales de primera categoría en el corazón de Palermo Soho, Buenos Aires.",
   keywords: [

@@ -34,7 +34,7 @@ function Nav({ scrolled, onNav }: { scrolled: boolean; onNav: (id: string) => vo
         className="font-display text-[22px] font-bold tracking-[3px] text-black uppercase cursor-pointer"
         onClick={() => onNav("home")}
       >
-        The Living<span className="text-gold">.</span>
+        The Living Room<span className="text-gold">.</span>
       </div>
 
       {/* Desktop */}
@@ -108,7 +108,7 @@ function Hero({ onNav }: { onNav: (id: string) => void }) {
       <div className="absolute inset-0">
         <Image
           src={PLACEHOLDER_IMAGES.hero}
-          alt="The Living Hotel"
+          alt="The Living Room Hotel"
           fill
           className="object-cover"
           priority
@@ -160,7 +160,7 @@ function About() {
         Tu hotel, tu departamento
       </h2>
       <p className="text-[15px] text-muted max-w-[550px] leading-[1.7] font-light">
-        The Living combina la privacidad de un hogar con los servicios de
+        The Living Room combina la privacidad de un hogar con los servicios de
         un hotel boutique de primera categoría en el corazón de Palermo Soho.
       </p>
 
@@ -281,7 +281,7 @@ function ExteriorGallery() {
           <div key={i} className="relative aspect-[4/3] overflow-hidden">
             <Image
               src={img}
-              alt={`The Living - Exterior ${i + 1}`}
+              alt={`The Living Room - Exterior ${i + 1}`}
               fill
               className="object-cover hover:scale-105 transition-transform duration-700"
               sizes="(max-width: 768px) 50vw, 25vw"
@@ -998,7 +998,7 @@ function Footer() {
   return (
     <footer id="contact" className="bg-black text-light py-16 px-8 text-center">
       <div className="font-display text-[24px] font-bold tracking-[3px] text-white mb-3">
-        The Living<span className="text-gold">.</span>
+        The Living Room<span className="text-gold">.</span>
       </div>
       <p className="text-[13px] text-muted max-w-[400px] mx-auto leading-[1.6] mb-6">
         44 departamentos de diseño en el corazón de Palermo Soho.
@@ -1039,7 +1039,7 @@ function Footer() {
         {COMPANY_NAME}
       </div>
       <div className="mt-4 pt-8 border-t border-white/10 text-[11px] text-muted/50">
-        &copy; {new Date().getFullYear()} The Living. Todos los derechos reservados.
+        &copy; {new Date().getFullYear()} The Living Room. Todos los derechos reservados.
       </div>
     </footer>
   );
@@ -1048,7 +1048,7 @@ function Footer() {
 // ─── Floating WhatsApp ───────────────────────────────────────────────────────
 function FloatingWhatsApp() {
   const msg = encodeURIComponent(
-    "Hola! Me gustaría consultar sobre disponibilidad en The Living."
+    "Hola! Me gustaría consultar sobre disponibilidad en The Living Room."
   );
   return (
     <a
