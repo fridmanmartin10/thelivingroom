@@ -1,24 +1,32 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-background: #fafaf8;
-  --color-foreground: #0a0a0a;
-  --color-black: #0a0a0a;
-  --color-charcoal: #1a1a1a;
-  --color-dark: #2a2a2a;
-  --color-mid: #4a4a4a;
-  --color-muted: #8a8a8a;
-  --color-light: #c8c8c8;
-  --color-cream: #f5f0eb;
-  --color-white: #fafaf8;
-  --color-gold: #c9a96e;
-  --color-gold-light: #dfc49a;
-  --color-accent: #e8ddd0;
-  --color-success: #4a7c59;
-  --color-error: #c45b5b;
-  --font-display: var(--font-playfair);
-  --font-body: var(--font-dm-sans);
-  --font-sans: var(--font-dm-sans);
+  /* — Base Pampa palette — */
+  --color-verde: #2d3a2e;
+  --color-verde-deep: #1f2a20;
+  --color-sage: #8b9485;
+  --color-crema: #f5ede0;
+  --color-tierra: #c8704f;
+  --color-tierra-deep: #a85a3f;
+  --color-negro: #1a1a1a;
+  --color-paper: #faf6ee;
+
+  /* — Product accents — */
+  --color-coral: #ff6b5a;
+  --color-acai: #7b3f8f;
+  --color-matcha: #a8c765;
+  --color-dorado: #e8b547;
+  --color-polvo: #e8c5b0;
+
+  /* — Aliases — */
+  --color-background: #faf6ee;
+  --color-foreground: #1a1a1a;
+
+  /* — Fonts — */
+  --font-display: var(--font-oswald);
+  --font-serif: var(--font-cormorant);
+  --font-body: var(--font-inter);
+  --font-sans: var(--font-inter);
 }
 
 html {
@@ -27,44 +35,167 @@ html {
 
 body {
   font-family: var(--font-body), -apple-system, sans-serif;
-  background: var(--color-background);
-  color: var(--color-foreground);
+  background: var(--color-paper);
+  color: var(--color-negro);
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: var(--color-cream); }
-::-webkit-scrollbar-thumb { background: var(--color-gold); border-radius: 3px; }
-
-/* Animations */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(30px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-@keyframes pulse {
-  0%, 100% { opacity: 0.4; }
-  50% { opacity: 1; }
+/* — Display utility — */
+.font-display {
+  font-family: var(--font-display), Impact, sans-serif;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  font-weight: 700;
 }
 
-.animate-fade-up { animation: fadeUp 0.8s ease both; }
-.animate-fade-up-d1 { animation: fadeUp 0.8s ease 0.15s both; }
-.animate-fade-up-d2 { animation: fadeUp 0.8s ease 0.3s both; }
-.animate-fade-up-d3 { animation: fadeUp 0.8s ease 0.45s both; }
-.animate-fade-in { animation: fadeIn 0.3s ease both; }
-.animate-slide-up { animation: slideUp 0.35s ease both; }
-.animate-pulse-slow { animation: pulse 2s ease infinite; }
+.font-serif {
+  font-family: var(--font-serif), "Times New Roman", serif;
+  font-style: italic;
+}
 
-/* Selection */
-::selection {
-  background: var(--color-gold);
-  color: white;
+/* — Logo composite — */
+.logo-pampa {
+  display: inline-flex;
+  flex-direction: column;
+  line-height: 0.85;
+  letter-spacing: -0.04em;
+}
+.logo-pampa .pampa {
+  font-family: var(--font-display);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.logo-pampa .club {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 500;
+  align-self: flex-end;
+}
+
+/* — Scrollbar — */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-paper);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-verde);
+  border-radius: 4px;
+}
+
+/* — Subtle film grain — */
+.grain::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 100;
+  opacity: 0.035;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+
+/* — Marquee — */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.marquee-track {
+  animation: marquee 38s linear infinite;
+}
+
+/* — Reveal — */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.rise {
+  animation: rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+  animation-delay: 0.05s;
+}
+@media (prefers-reduced-motion: reduce) {
+  .rise {
+    animation: none;
+  }
+}
+
+/* — Bowl gradients (placeholder hero shots) — */
+.bowl-coral {
+  background: radial-gradient(
+    circle at 50% 45%,
+    #ff8a72 0%,
+    #ff6b5a 35%,
+    #c84d3f 75%,
+    #6e2a23 100%
+  );
+}
+.bowl-acai {
+  background: radial-gradient(
+    circle at 50% 45%,
+    #9b5fae 0%,
+    #7b3f8f 35%,
+    #4d2659 75%,
+    #2a1531 100%
+  );
+}
+.bowl-matcha {
+  background: radial-gradient(
+    circle at 50% 45%,
+    #c2dc89 0%,
+    #a8c765 35%,
+    #6e8a3e 75%,
+    #3a4a22 100%
+  );
+}
+.bowl-verde {
+  background: radial-gradient(
+    circle at 50% 45%,
+    #5e7560 0%,
+    #3e5040 35%,
+    #2d3a2e 75%,
+    #14201a 100%
+  );
+}
+
+/* — Hover lift — */
+.lift {
+  transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1),
+    box-shadow 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.lift:hover {
+  transform: translateY(-4px);
+}
+
+/* — Underline link — */
+.ulink {
+  position: relative;
+  display: inline-block;
+}
+.ulink::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.ulink:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
 }
