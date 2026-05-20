@@ -529,8 +529,9 @@ export default function Home() {
                 <div className="text-[10px] tracking-[0.25em] uppercase text-paper/45 mb-2">
                   Dirección
                 </div>
-                <p>La Pampa 1117</p>
+                <p>Sucre 860</p>
                 <p>Belgrano · Buenos Aires</p>
+                <p className="text-paper/45 text-xs mt-1">a 3 cuadras del local actual</p>
               </div>
               <div>
                 <div className="text-[10px] tracking-[0.25em] uppercase text-paper/45 mb-2">

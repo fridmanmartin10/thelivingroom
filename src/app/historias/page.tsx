@@ -257,19 +257,17 @@ export default function HistoriasPage() {
                 <div className="font-serif italic text-verde/75 text-2xl mb-4">
                   La nueva casa
                 </div>
-                <div className="font-display text-verde text-[18vw] sm:text-[6.5rem] leading-[0.82] -tracking-[0.04em]">
-                  LA
+                <div className="font-display text-verde text-[22vw] sm:text-[7.5rem] leading-[0.82] -tracking-[0.04em]">
+                  SUCRE
                   <br />
-                  PAMPA
-                  <br />
-                  1117.
+                  860.
                 </div>
                 <div className="font-serif italic text-tierra text-2xl mt-6">
                   Belgrano · Buenos Aires
                 </div>
               </div>
               <div className="text-xs text-verde/65 leading-relaxed">
-                <p>A tres cuadras de donde nos conocés.</p>
+                <p>A tres cuadras del local actual.</p>
                 <p>Más luz, más espacio, estudio propio.</p>
               </div>
             </div>

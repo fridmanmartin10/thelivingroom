@@ -52,8 +52,9 @@ export default function Footer() {
               Visita
             </div>
             <ul className="space-y-2 text-sm text-paper/80">
-              <li>La Pampa 1117</li>
+              <li>Sucre 860</li>
               <li>Belgrano · Buenos Aires</li>
+              <li className="text-paper/55 text-xs">a 3 cuadras del local actual</li>
               <li>Lun a Vie · 7–20h</li>
               <li>Sáb y Dom · 8–18h</li>
             </ul>

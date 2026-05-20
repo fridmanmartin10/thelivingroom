@@ -30,7 +30,7 @@ export default function MoveBanner() {
                 </div>
                 <div className="border-t border-paper/30 pt-5">
                   <div className="text-xs tracking-[0.2em] uppercase opacity-80">
-                    La Pampa 1117 · Belgrano
+                    Sucre 860 · Belgrano
                   </div>
                 </div>
               </div>
