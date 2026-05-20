@@ -92,14 +92,14 @@ export default function Home() {
         </div>
 
         <div className="mx-auto max-w-7xl px-6">
-          <p className="font-serif italic text-paper/70 text-lg md:text-xl mb-10 rise">
+          <p className="font-serif italic text-paper/70 text-lg md:text-xl mb-10">
             un círculo privado de bienestar urbano —
           </p>
 
-          <h1 className="font-display text-paper text-[20vw] md:text-[15rem] leading-[0.82] tracking-[-0.04em] rise">
+          <h1 className="font-display text-paper text-[20vw] md:text-[15rem] leading-[0.82] tracking-[-0.04em]">
             PAMPA
           </h1>
-          <div className="flex justify-end -mt-3 md:-mt-6 rise">
+          <div className="flex justify-end -mt-3 md:-mt-6">
             <span className="font-serif italic text-paper text-[14vw] md:text-[10rem] leading-none">
               club
             </span>
@@ -107,13 +107,13 @@ export default function Home() {
 
           <div className="mt-14 md:mt-20 grid md:grid-cols-12 gap-8 items-end">
             <div className="md:col-span-7">
-              <p className="text-paper/85 text-xl md:text-3xl leading-snug max-w-2xl font-light rise">
+              <p className="text-paper/85 text-xl md:text-3xl leading-snug max-w-2xl font-light">
                 Café de especialidad, cocina saludable y movimiento.
                 <br />
                 En un mismo lugar, para 200 socias.
               </p>
             </div>
-            <div className="md:col-span-5 flex flex-col md:items-end gap-4 rise">
+            <div className="md:col-span-5 flex flex-col md:items-end gap-4">
               <Link
                 href="#mudanza"
                 className="inline-flex items-center justify-center bg-paper text-verde px-7 py-4 text-xs tracking-[0.25em] uppercase font-medium hover:bg-tierra hover:text-paper transition-colors"
